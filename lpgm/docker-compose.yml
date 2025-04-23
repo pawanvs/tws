@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: lpgm-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - monitor
+
+  loki:
+    image: grafana/loki:2.9.2
+    container_name: lpgm-loki
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+    networks:
+      - monitor
+
+  promtail:
+    image: grafana/promtail:2.9.2
+    container_name: lpgm-promtail
+    user: "0:0"  # 👈 run as root inside the container
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/log:/var/log:ro
+      - ./promtail-config.yaml:/etc/promtail/config.yaml
+    networks:
+      - monitor
+
+volumes:
+  grafana_data:
+
+networks:
+  monitor:
+    driver: bridge
+

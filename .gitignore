@@ -1,3 +1,19 @@
+# Ignore node modules
+node_modules/
+
+# Ignore Python virtual environments
+venv/
+myenv/
+
+# Ignore Docker volumes
+data/
+
+# Ignore system files
+*.pyc
+.DS_Store
+
+dispatch/build/
+
 # Logs
 logs
 *.log
