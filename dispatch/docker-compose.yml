@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  dispatch-ui:
+    build: .
+    container_name: dispatch-ui
+    ports:
+      - "${PORT}:${PORT}"
+    env_file:
+      - .env
+    environment:
+      - env=${ENVIRONMENT}
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-labels: "container_name"
+
